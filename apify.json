@@ -4,11 +4,7 @@
 	"version": {
 		"versionNumber": "0.1",
 		"buildTag": "latest",
-		"envVars": [
-			{
-				APIFY_MEMORY_MBYTES: 2048
-			}
-		],
+		"envVars": [],
 		"sourceType": "TARBALL",
 		"tarballUrl": null
 	},
