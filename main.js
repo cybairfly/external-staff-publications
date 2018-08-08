@@ -4,7 +4,7 @@ const rp = require('request-promise');
 const proxyGroup = 'BUYPROXIES94952';
 
 Apify.main(async () => {
-  console.log(APIFY_MEMORY_MBYTES);
+  console.log(process.env.APIFY_MEMORY_MBYTES);
   // Get queue and enqueue first url.
   const requestQueue = await Apify.openRequestQueue();
   await requestQueue.addRequest(new Apify.Request({url: 'http://www.forms.fortis.com/External_Staff_Publications_EN.asp'}));
