@@ -2,27 +2,25 @@ const Apify = require('apify');
 const rp = require('request-promise');
 
 const proxyGroup = 'BUYPROXIES94952';
+const sourceList = [{
+  url: 'http://www.forms.fortis.com/External_Staff_Publications_EN.asp'
+}]
 
 Apify.main(async () => {
-  // Get queue and enqueue first url.
-  const requestQueue = await Apify.openRequestQueue();
-  await requestQueue.addRequest(new Apify.Request({url: 'http://www.forms.fortis.com/External_Staff_Publications_EN.asp'}));
+  const requestList = new Apify.RequestList({
+    sources: sourceList
+  });
+  await requestList.initialize();
 
-  // const input = await Apify.getValue('INPUT');
-  // const dataset = await Apify.openDataset('external-staff-publications');
-
-  // Create crawler.
   const crawler = new Apify.PuppeteerCrawler({
-    requestQueue,
+    requestList,
+    maxRequestsPerCrawl: 1,
 
     launchPuppeteerOptions: {
       useApifyProxy: true,
       apifyProxyGroups: [proxyGroup]
     },
 
-    // This page is executed for each request.
-    // If request failes then it's retried 3 times.
-    // Parameter page is Puppeteers page object with loaded page.
     handlePageFunction: async ({page, request}) => {
       const title = await page.title();
       console.log('Processing page:', title);
@@ -48,12 +46,10 @@ Apify.main(async () => {
       Promise.all(data.map(row => Apify.pushData(row)));
     },
 
-    // If request failed 4 times then this function is executed.
     handleFailedRequestFunction: async ({request}) => {
       console.log(`Request ${request.url} failed 4 times`);
     },
   });
 
-  // Run crawler.
   await crawler.run();
 });
