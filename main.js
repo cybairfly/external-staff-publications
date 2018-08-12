@@ -43,9 +43,10 @@ Apify.main(async () => {
 
       console.log(`Found ${data.length} items total`);
 
-      await Promise.all(data.map(row => Apify.pushData(row)))
-        .then(() => console.log('Data stored in dataset'))
-        .catch(e => console.log('Error storing data to dataset', e));
+      for (let row of data) {
+        await Apify.pushData(row);
+      }
+      console.log('Data stored in dataset');
     },
 
     handleFailedRequestFunction: async ({request}) => {
