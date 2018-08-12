@@ -26,10 +26,6 @@ Apify.main(async () => {
   const title = await page.title();
   console.log('Page title:', title);
 
-  const response = await rp('https://api.apify.com/v2/browser-info/');
-  const info = JSON.parse(response);
-  console.log(`Using proxy: ${info.clientIp} (${info.countryCode})`);
-
   const data = await page.$$eval('table.mTable tbody tr:not(#trHeader)', pageFunction);
   console.log(`Found ${data.length} items total`);
 
