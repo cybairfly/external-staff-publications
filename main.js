@@ -22,8 +22,10 @@ Apify.main(async () => {
     },
 
     handlePageFunction: async ({page, request}) => {
+      console.log(`Page loaded: ${request.url}`);
+
       const title = await page.title();
-      console.log('Processing page:', title);
+      console.log('Page title:', title);
 
       const response = await rp('https://api.apify.com/v2/browser-info/');
       const info = JSON.parse(response);
@@ -39,11 +41,11 @@ Apify.main(async () => {
 
       const data = await page.$$eval('table.mTable tbody tr:not(#trHeader)', pageFunction);
 
-      console.log(`Page has been loaded: ${request.url}`);
       console.log(`Found ${data.length} items total`);
 
-      console.log('Store data in dataset');
-      Promise.all(data.map(row => Apify.pushData(row)));
+      await Promise.all(data.map(row => Apify.pushData(row)))
+        .then(() => console.log('Data stored in dataset'))
+        .catch(e => console.log('Error storing data to dataset', e));
     },
 
     handleFailedRequestFunction: async ({request}) => {
