@@ -1,5 +1,4 @@
 const Apify = require('apify');
-const rp = require('request-promise');
 
 const proxyGroup = 'BUYPROXIES94952';
 const urlToCrawl = 'http://www.forms.fortis.com/External_Staff_Publications_EN.asp';
